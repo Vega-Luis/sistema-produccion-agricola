@@ -1,9 +1,19 @@
 #ifndef INSERT_H
 #define INSERT_H
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <stdint.h>
+#include <string.h>
 #include <libpq-fe.h>
 
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include "conn_tools.h"
+
+void insert_area(PGconn *conn, char *code, float dimension, char *principal_product);
 void insert_products(PGconn *conn, char *batch, char *name, float cost, float taxe);
-void insert_employee(PGcon *conn, char *id_number, char *name, char *position,
+void insert_employee(PGconn *conn, char *id_number, char *name, char *position,
                 float salary);
 int new_payroll(PGconn *conn, int month, int year);
 void add_employee_to_payroll(PGconn *conn, int id_employee, int id_payroll);

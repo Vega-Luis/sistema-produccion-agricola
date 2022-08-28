@@ -19,5 +19,7 @@ void end_conn(PGresult *res,PGconn *conn);
  */
 void check_status(PGresult *res,PGconn *conn);
 
+void check_insert(PGresult *res, PGconn *conn);
+
 
 #endif
