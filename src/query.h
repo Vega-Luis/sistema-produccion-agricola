@@ -2,6 +2,8 @@
 #define QUERY_H
 #include <libpq-fe.h>
 #include <stdlib.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include "conn_tools.h"
 
 void query_area(PGconn *conn);
