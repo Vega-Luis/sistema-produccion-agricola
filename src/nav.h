@@ -12,4 +12,6 @@ void ope_opts_nav(PGconn * conn);
 void adm_opts_nav(PGconn * conn);
 void main_menu_nav(PGconn *conn);
 void reg_payroll(PGconn *conn);
+void cons_payroll(PGconn *conn);
+void cons_bills(PGconn *conn);
 #endif

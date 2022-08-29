@@ -22,7 +22,7 @@ void ope_opts_nav(PGconn *conn) {
 	bool go_back = false;
 	char opt;
 	do {
-	//system("clear");
+	system("clear");
 	ope_opts();
 	scanf(" %c", &opt);
 	switch (opt)
@@ -31,13 +31,13 @@ void ope_opts_nav(PGconn *conn) {
 		break;
 
 	case '2':
-		//system("clear");
+		system("clear");
 		query_area(conn);
 		wait();	
 		break;
 
 	case '3':
-		//system("clear");
+		system("clear");
 		query_employees(conn);
 		wait();
 		break;
@@ -72,16 +72,18 @@ void adm_opts_nav(PGconn *conn) {
     case '3':
         break;
 
-    case 4:
+    case '4':
+		cons_payroll(conn);
         break;
     
-    case 5:
+    case '5':
+		cons_bills(conn);
         break;
     
-    case 6:
+    case '6':
         break;
 
-    case 7:
+    case '7':
         go_back = true;
         break;
 
@@ -127,7 +129,6 @@ void reg_payroll(PGconn *conn)
 	int id_payroll, id_employee;
 	int month, year;
 	bool go_back = false;
-	bool add_employee = true;
 	char opt;
 
 	do {
@@ -175,5 +176,37 @@ void reg_payroll(PGconn *conn)
 			break;
 		}
 	} while (!go_back);
+}
+
+void cons_payroll(PGconn * conn)
+{
+	char stay;
+	int id_payroll;
+	do {
+		system("clear");
+		query_payrolls(conn);
+		printf("\n	Ingrese el id de nomina para ver detalles: ");
+		scanf("%d", &id_payroll);
+		system("clear");
+		query_payroll_info(conn, id_payroll);
+		printf("\n	Desea consultar otra nomina S/N ");
+		scanf(" %c", &stay); 
+	} while (stay == 's' || stay == 'S');
+}
+
+void cons_bills(PGconn *conn)
+{
+	char stay;
+	int id_bill;
+	do {
+		system("clear");
+		query_bills(conn);
+		printf("\n	Ingrese el id de factura para ver detalles: ");
+		scanf("%d", &id_bill);
+		system("clear");
+		query_bill_info(conn, id_bill);
+		printf("\n	Desea consultar otra factura S/N ");
+		scanf(" %c", &stay); 
+	} while (stay == 's' || stay == 'S');	
 }
 
