@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <libpq-fe.h>
 #include "query.h"
+#include "conn_tools.h"
+#include "insert.h"
 
 static void exit_nicely(PGconn *conn)
 {
@@ -33,11 +35,16 @@ int main(int argc, char **argv)
 		exit_nicely(conn);
 	}
 
-	printf("Conection succesfull\nHost: %s\nPort: %s", PQhost(conn), PQport(conn));
-
+	printf("\n=======================Conection successful=======================\n" );
+	
 	query_employees(conn);
+	query_area(conn);
+	query_payrolls(conn);
+	query_payroll_info(conn, 16);
+	query_bills(conn);
+	query_bill_info(conn, 11);
 
+	PQfinish(conn);
 
-	return 0;
-
+return 0;
 }
