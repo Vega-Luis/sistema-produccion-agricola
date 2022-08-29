@@ -56,7 +56,8 @@ void adm_opts_nav(PGconn *conn) {
     bool go_back = false;
     char opt;
     do {
-    //system("clear");
+    system("clear");
+	adm_opts();
     scanf(" %c", &opt);
     switch (opt)
     {
@@ -65,6 +66,7 @@ void adm_opts_nav(PGconn *conn) {
         break;
     
     case '2':
+		reg_payroll(conn);
         break;
 
     case '3':
@@ -100,7 +102,6 @@ void main_menu_nav(PGconn *conn) {
 		{
 		case '1':
 			if (check_credentials()) {
-				//system("clear");
 				ope_opts_nav(conn);
 			} else {
 				printf("	Credenciales invalidos");
@@ -108,10 +109,7 @@ void main_menu_nav(PGconn *conn) {
 			break;
 		
 		case '2':
-			//system("clear");
-			adm_opts();
-			scanf(" %c", &opt);
-			printf("You choosed: %c\n", opt);
+			adm_opts_nav(conn);
 			break;
 
 		case '3':
@@ -123,3 +121,59 @@ void main_menu_nav(PGconn *conn) {
 		}
 	} while (!exit);
 }
+
+void reg_payroll(PGconn *conn)
+{
+	int id_payroll, id_employee;
+	int month, year;
+	bool go_back = false;
+	bool add_employee = true;
+	char opt;
+
+	do {
+		system("clear");
+		payroll_opts();
+		scanf(" %c", &opt);
+
+		switch (opt)
+		{
+		case '1':
+			system("clear");
+			menu_line();
+			printf("|    	        CREAR NOMINA              |\n");
+			menu_line();
+			printf("	Ingrese el mes de la nomina: ");
+			scanf("%d", &month);
+			printf("	Ingrese el anio de la nomina: ");
+			scanf("%d", &year);
+			new_payroll(conn, month, year);
+			query_payroll_simple(conn);
+			wait();
+			break;
+		
+		case '2':
+			system("clear");
+			menu_line();
+			printf("|        AGREGAR EMPLEADO A NOMINA        |\n");
+			menu_line();
+			query_employees(conn);
+			query_payroll_simple(conn);
+			printf("\n	Ingrese el id de la nomina: ");
+			scanf("%d", &id_payroll);
+			printf("\n	Ingrese el id del empleado: ");
+			scanf("%d", &id_employee);
+			add_employee_to_payroll(conn, id_employee, id_payroll);
+			query_payroll_info(conn, id_payroll);
+			wait();
+			break;
+
+		case '3':
+			go_back = true;
+			break;
+
+		default:
+			break;
+		}
+	} while (!go_back);
+}
+

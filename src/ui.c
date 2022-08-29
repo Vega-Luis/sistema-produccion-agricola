@@ -43,3 +43,15 @@ void adm_opts()
     menu_line();
     printf("    Selecione una opcion: ");
 }
+
+void payroll_opts()
+{
+    menu_line();
+    printf("|           OPCIONES DE NOMINA            |\n");
+    menu_line();
+    printf("|       1. Crear nueva nomina             |\n");
+    printf("|       2. Modificar nomina               |\n");
+    printf("|       3. Volver                         |\n");
+    menu_line();
+    printf("    Selecione una opcion: ");
+}

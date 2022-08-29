@@ -196,3 +196,23 @@ void query_anual_balance(PGconn *conn)
 {
 
 }
+
+void query_payroll_simple(PGconn *conn) {
+    PGresult *res = PQexec(conn, "SELECT \"Payroll\".id, month, year"
+                " FROM public.\"Payroll\";");
+    check_status(res, conn);
+
+    int rows = PQntuples(res);
+
+    char const *params = "  %-7s|  %-7s| %-7s\n";
+    printf("\n");
+    printf(params, "INDEX", "MONTH", "YEAR");
+    printf("=======================================================================================\n");
+
+    for (int i = 0; i < rows; i++)
+    {
+        printf(params, PQgetvalue(res, i, 0), PQgetvalue(res, i, 1),
+               PQgetvalue(res, i, 2));
+    }
+    PQclear(res);    
+}
