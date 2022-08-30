@@ -94,6 +94,8 @@ void adm_opts_nav(PGconn *conn) {
         break;
     
     case '6':
+		query_balance(conn);
+		wait();
         break;
 
     case '7':
