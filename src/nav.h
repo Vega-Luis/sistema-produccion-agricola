@@ -15,4 +15,5 @@ void reg_payroll(PGconn *conn);
 void cons_payroll(PGconn *conn);
 void cons_bills(PGconn *conn);
 void load_products(PGconn *conn);
+void reg_bill(PGconn *conn, char * shop_name, char *legal_identity, char *phone_number);
 #endif

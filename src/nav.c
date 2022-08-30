@@ -1,7 +1,7 @@
 #include "nav.h"
 
 void wait() {
-	printf("\nPresione enter para continuar...\n");
+	printf("\n	Presione enter para continuar...\n");
 	getchar();
 	getchar();
 }
@@ -54,6 +54,10 @@ void ope_opts_nav(PGconn *conn) {
 }
 
 void adm_opts_nav(PGconn *conn) {
+	char shop_name[] = "Default";
+	char legal_identity[] = "0000000000";
+	char phone_number[] = "00000000";
+
     bool go_back = false;
     char opt;
     do {
@@ -63,7 +67,14 @@ void adm_opts_nav(PGconn *conn) {
     switch (opt)
     {
     case '1':
-        
+		printf("\n	Ingrese el nombre del la tienda: ");
+		scanf(" %[^\n]s", shop_name);
+		printf("\n	Ingrese la cedula juridica: ");
+		scanf(" %s", legal_identity);
+		printf("\n	Ingrese el numero de telefono: ");
+		scanf(" %s", phone_number);
+		printf("\n	Hecho....");
+		wait();
         break;
     
     case '2':
@@ -71,6 +82,7 @@ void adm_opts_nav(PGconn *conn) {
         break;
 
     case '3':
+		reg_bill(conn, shop_name, legal_identity, phone_number);
         break;
 
     case '4':
@@ -244,4 +256,44 @@ void load_products(PGconn *conn)
 	}
 	fclose(file);
 	wait();
+}
+
+void reg_bill(PGconn *conn,char *shop_name, char *legal_identity, char *phone_number) {
+	int id_bill, id_product, id_area;
+	int day, month, year;
+	char client_name[] = "Default";
+	char stay;
+	system("clear");
+	menu_line();
+	printf("|    	        CREAR FACTURA              |\n");
+	menu_line();
+	printf("	Ingrese el dia de la factura: ");
+	scanf("%d", &day);
+	printf("	Ingrese el mes de la factura: ");
+	scanf("%d", &month);
+	printf("	Ingrese el anio de la factura: ");
+	scanf("%d", &year);
+	printf("	Ingrese el nombre del cliente: ");
+	scanf(" %[^\n]s", client_name);
+	new_bill(conn,day, month, year, client_name, shop_name, legal_identity, phone_number);
+	do {
+			system("clear");
+			menu_line();
+			printf("|        AGREGAR PRODUCTO        |\n");
+			menu_line();
+			query_bills_simple(conn);
+			query_area(conn);
+			query_products(conn);
+			printf("\n	Ingrese el id de factura: ");
+			scanf("%d", &id_bill);
+			printf("\n	Ingrese el id de producto: ");
+			scanf("%d", &id_product);
+			printf("\n	Ingrese el id de area: ");
+			scanf("%d", &id_area);
+			add_product_to_bill(conn, id_bill, id_product, id_area);
+			system("clear");
+			query_bill_info(conn, id_bill);
+			printf("\n	Desea agregar otra producto S/N ");
+			scanf(" %c", &stay); 
+	} while (stay == 's' || stay == 'S');	
 }

@@ -14,5 +14,6 @@ void query_bills(PGconn *conn);
 void query_bill_info(PGconn *conn, int id_bill);
 void query_anual_balance(PGconn *conn);
 void query_payroll_simple(PGconn *conn);
-
+void query_products(PGconn *conn);
+void query_bills_simple(PGconn *conn);
 #endif

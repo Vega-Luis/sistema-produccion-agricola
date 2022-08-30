@@ -216,3 +216,46 @@ void query_payroll_simple(PGconn *conn) {
     }
     PQclear(res);    
 }
+
+void query_products(PGconn * conn)
+{
+    PGresult *res = PQexec(conn, "SELECT id, batch, name, cost, taxe"
+                    " FROM public.\"Product\";");
+    check_status(res, conn);
+
+    char const *params = "  %-7s|  %-7s|  %-12s | %-12s| %-12s\n";
+    printf("\n");
+    printf(params, "INDEX", "BATCH", "NAME", "COST", "TAXE");
+    printf("==================================================================\n");
+
+    int rows = PQntuples(res);
+
+    for (int i = 0; i < rows; i++)
+    {
+        printf(params, PQgetvalue(res, i, 0),
+               PQgetvalue(res, i, 1), PQgetvalue(res, i, 2), PQgetvalue(res, i, 3),
+               PQgetvalue(res, i, 4));
+    }
+    PQclear(res);    
+}
+
+void query_bills_simple(PGconn *conn)
+{
+    PGresult *res = PQexec(conn, "SELECT id, month, year, client_name, shop_name"
+                " FROM public.\"Bill\";");
+    check_status(res, conn);
+
+    int rows = PQntuples(res);
+
+    char const *params = "  %-7s|  %-7s| %-7s| %-30s| %-12s\n";
+    printf("\n");
+    printf(params, "INDEX", "MONTH", "YEAR", "CLIENT", "SHOP");
+    printf("=======================================================================================\n");
+
+    for (int i = 0; i < rows; i++)
+    {
+        printf(params, PQgetvalue(res, i, 0), PQgetvalue(res, i, 1),
+               PQgetvalue(res, i, 2), PQgetvalue(res, i, 3), PQgetvalue(res, i, 4));
+    }
+    PQclear(res);   
+}
