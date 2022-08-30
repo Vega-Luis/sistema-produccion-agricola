@@ -27,7 +27,8 @@ void ope_opts_nav(PGconn *conn) {
 	scanf(" %c", &opt);
 	switch (opt)
 	{
-	case '1': 
+	case '1':
+		load_products(conn);
 		break;
 
 	case '2':
@@ -93,6 +94,7 @@ void adm_opts_nav(PGconn *conn) {
 
     } while (!go_back);
 }
+
 void main_menu_nav(PGconn *conn) {
     bool exit = false;
 	char opt;
@@ -210,3 +212,36 @@ void cons_bills(PGconn *conn)
 	} while (stay == 's' || stay == 'S');	
 }
 
+void load_products(PGconn *conn)
+{
+	char path[100];
+	char line[50];
+	FILE *file;
+	char *batch;
+	char *name;
+	char *cost;
+	char *taxe;
+	float cost_value;
+	float taxe_value;
+	printf("\n	Ingrese la direcion del archivo: ");
+	scanf(" %[^\n]s", path);
+
+	file = fopen(path, "r");
+
+	if (file == NULL) {
+		printf("File can't be opened \n");
+	}
+
+	while (fgets(line, 50, file) != NULL) {
+		batch = strtok(line, ";");
+		name = strtok(NULL, ";");
+		cost = strtok(NULL, ";");
+		taxe = strtok(NULL, ";");
+		cost_value = atof(cost);
+		taxe_value = atof(taxe);
+		taxe_value = (taxe_value * cost_value) / 100.0;
+		insert_products(conn, batch, name, cost_value, taxe_value);
+	}
+	fclose(file);
+	wait();
+}
