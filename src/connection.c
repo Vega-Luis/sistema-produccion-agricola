@@ -1,15 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <libpq-fe.h>
-#include "query.h"
-#include "conn_tools.h"
-#include "insert.h"
 
-static void exit_nicely(PGconn *conn)
-{
-	PQfinish(conn);
-	exit(1);
-}
+
+
+#include "nav.h"
+
+
+
+
+
 
 int main(int argc, char **argv)
 {
@@ -32,17 +32,19 @@ int main(int argc, char **argv)
 	if (PQstatus(conn) != CONNECTION_OK)
 	{
 		fprintf(stderr, "Connection failed: %s", PQerrorMessage(conn));
-		exit_nicely(conn);
+		PQfinish(conn);
+		exit(1);
 	}
 
-	printf("\n=======================Conection successful=======================\n" );
-	
-	query_employees(conn);
-	query_area(conn);
-	query_payrolls(conn);
-	query_payroll_info(conn, 16);
-	query_bills(conn);
-	query_bill_info(conn, 11);
+	printf("\nConection successful...\n" );
+
+	main_menu_nav(conn);
+	//query_employees(conn);
+	//query_area(conn);
+	//query_payrolls(conn);
+	//query_payroll_info(conn, 16);
+	//query_bills(conn);
+	//query_bill_info(conn, 11);
 
 	PQfinish(conn);
 

@@ -192,7 +192,99 @@ void query_bill_info(PGconn *conn, int id_bill)
     }
     PQclear(res);
 }
-void query_anual_balance(PGconn *conn)
-{
 
+void query_payroll_simple(PGconn *conn) {
+    PGresult *res = PQexec(conn, "SELECT \"Payroll\".id, month, year"
+                " FROM public.\"Payroll\";");
+    check_status(res, conn);
+
+    int rows = PQntuples(res);
+
+    char const *params = "  %-7s|  %-7s| %-7s\n";
+    printf("\n");
+    printf(params, "INDEX", "MONTH", "YEAR");
+    printf("=======================================================================================\n");
+
+    for (int i = 0; i < rows; i++)
+    {
+        printf(params, PQgetvalue(res, i, 0), PQgetvalue(res, i, 1),
+               PQgetvalue(res, i, 2));
+    }
+    PQclear(res);    
+}
+
+void query_products(PGconn * conn)
+{
+    PGresult *res = PQexec(conn, "SELECT id, batch, name, cost, taxe"
+                    " FROM public.\"Product\";");
+    check_status(res, conn);
+
+    char const *params = "  %-7s|  %-7s|  %-12s | %-12s| %-12s\n";
+    printf("\n");
+    printf(params, "INDEX", "BATCH", "NAME", "COST", "TAXE");
+    printf("==================================================================\n");
+
+    int rows = PQntuples(res);
+
+    for (int i = 0; i < rows; i++)
+    {
+        printf(params, PQgetvalue(res, i, 0),
+               PQgetvalue(res, i, 1), PQgetvalue(res, i, 2), PQgetvalue(res, i, 3),
+               PQgetvalue(res, i, 4));
+    }
+    PQclear(res);    
+}
+
+void query_bills_simple(PGconn *conn)
+{
+    PGresult *res = PQexec(conn, "SELECT id, month, year, client_name, shop_name"
+                " FROM public.\"Bill\";");
+    check_status(res, conn);
+
+    int rows = PQntuples(res);
+
+    char const *params = "  %-7s|  %-7s| %-7s| %-30s| %-12s\n";
+    printf("\n");
+    printf(params, "INDEX", "MONTH", "YEAR", "CLIENT", "SHOP");
+    printf("=======================================================================================\n");
+
+    for (int i = 0; i < rows; i++)
+    {
+        printf(params, PQgetvalue(res, i, 0), PQgetvalue(res, i, 1),
+               PQgetvalue(res, i, 2), PQgetvalue(res, i, 3), PQgetvalue(res, i, 4));
+    }
+    PQclear(res);   
+}
+
+void query_balance(PGconn *conn)
+{
+    PGresult *res = PQexec(conn, "SELECT \"Bill\".year, SUM(salary), SUM(salary) * 1.5, sum(cost), sum(taxe), sum(cost) - (SUM(salary) * 1.5)"
+                " FROM public.\"Payroll\""
+                " INNER JOIN public.\"PayrollXEmployee\""
+                " ON \"Payroll\".id = \"PayrollXEmployee\".id_payroll"
+                " INNER JOIN public.\"Employee\""
+                " ON \"Employee\".id = \"PayrollXEmployee\".id_employee"
+	            " INNER JOIN public.\"Bill\""
+				" ON \"Bill\".\"year\" = \"Payroll\".\"year\""
+	            " INNER JOIN public.\"BillXProduct\""
+	            " ON \"BillXProduct\".fk_id_bill = \"Bill\".id"
+	            " INNER JOIN public.\"Product\""
+	            " ON \"Product\".id = \"BillXProduct\".fk_id_product"
+	            " GROUP BY \"Bill\".year, \"Payroll\".year;");
+    check_status(res, conn);
+
+    int rows = PQntuples(res);
+
+    char const *params = "  %-6s  |  %-14s  | %-14s  | %-14s  | %-14s  | %-16s\n";
+    printf("\n");
+    printf(params, "YEAR", "SUBTOTAL", "SS", "COST", "TAXE", "BALANCE");
+    printf("=======================================================================================\n");
+
+    for (int i = 0; i < rows; i++)
+    {
+        printf(params, PQgetvalue(res, i, 0), PQgetvalue(res, i, 1),
+               PQgetvalue(res, i, 2), PQgetvalue(res, i, 3), PQgetvalue(res, i, 4),
+               PQgetvalue(res, i, 5));
+    }
+    PQclear(res);      
 }
