@@ -23,22 +23,23 @@ void query_area(PGconn *conn)
 
 void query_employees(PGconn *conn)
 {
-    PGresult *res = PQexec(conn, "SELECT id, \"idNumber\", name, \"position\", salary"
-                    " FROM public.\"Employee\";");
+    PGresult *res = PQexec(conn, "SELECT id, \"idNumber\", name, \"position\", salary, SUM(salary) * 1.5"
+                    " FROM public.\"Employee\""
+                    " GROUP BY id, \"idNumber\";");
     check_status(res, conn);
 
     int rows = PQntuples(res);
 
-    char const *params = "  %-7s|  %-12s | %-30s | %-10s| %s\n";
+    char const *params = "  %-7s|  %-12s | %-30s | %-10s| %-17s| %-17s\n";
     printf("\n");
-    printf(params, "INDEX", "ID NUMBER", "NAME", "POSITION", "SALARY");
-    printf("=======================================================================================\n");
+    printf(params, "INDEX", "ID NUMBER", "NAME", "POSITION", "SALARY", "PLUS SC");
+    printf("=====================================================================================================\n");
 
     for (int i = 0; i < rows; i++)
     {
         printf(params, PQgetvalue(res, i, 0), PQgetvalue(res, i, 1),
                PQgetvalue(res, i, 2), PQgetvalue(res, i, 3),
-               PQgetvalue(res, i, 4));
+               PQgetvalue(res, i, 4),PQgetvalue(res, i, 5));
     }
     PQclear(res);
 }
