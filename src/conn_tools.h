@@ -12,13 +12,19 @@
 void end_conn(PGresult *res,PGconn *conn);
 
 /**
- * @brief Checks the result status
+ * @brief Checks the DB query result status
  * 
- * @param conn The PGconn 
- * @param res The PGresult
+ * @param conn DB connection object
+ * @param res DB query result
  */
 void check_status(PGresult *res,PGconn *conn);
 
+/**
+ * @brief Checks the DBinsert result status
+ * 
+ * @param res DB insert result
+ * @param conn DB connection object
+ */
 void check_insert(PGresult *res, PGconn *conn);
 
 

@@ -69,7 +69,7 @@ void insert_employee(PGconn *conn, char *id_number, char *name, char *position,
     PQclear(res);
 }
 
-int new_payroll(PGconn *conn, int month, int year)
+void new_payroll(PGconn *conn, int month, int year)
 {
     uint32_t month_binary = htonl((uint32_t)month);
     uint32_t year_binary = htonl((uint32_t)year);
@@ -89,7 +89,6 @@ int new_payroll(PGconn *conn, int month, int year)
                     0);
     check_insert(res, conn);
     PQclear(res);
-    return 0;
 }
 
 void add_employee_to_payroll(PGconn *conn, int id_employee, int id_payroll)
@@ -115,7 +114,7 @@ void add_employee_to_payroll(PGconn *conn, int id_employee, int id_payroll)
     PQclear(res);
 }
 
-int new_bill(PGconn *conn, int day, int month, int year, char *client_name,
+void new_bill(PGconn *conn, int day, int month, int year, char *client_name,
              char *shop_name, char *legal_identity, char *phone_number)
 {
     uint32_t day_binary = htonl((uint32_t)day);
