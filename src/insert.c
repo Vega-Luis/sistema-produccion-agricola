@@ -34,7 +34,7 @@ void insert_products(PGconn *conn, char *batch, char *name, float cost, float ta
     PGresult *res = PQexecParams(conn,
                     "INSERT INTO public.\"Product\"("
                     "batch, name, cost, taxe)"
-                    "VALUES ($1, $2, $3::real, $4::real);",
+                    "VALUES ($1, $2, $3::int, $4::int);",
                     4,
                     NULL,
                     param_values,

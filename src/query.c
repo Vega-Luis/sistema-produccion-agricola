@@ -275,7 +275,7 @@ void query_balance(PGconn *conn)
 
     int rows = PQntuples(res);
 
-    char const *params = "  %-7s|  %-7s| %-12s| %-30s| %-12s| %-12s\n";
+    char const *params = "  %-6s  |  %-14s  | %-14s  | %-14s  | %-14s  | %-16s\n";
     printf("\n");
     printf(params, "YEAR", "SUBTOTAL", "SS", "COST", "TAXE", "BALANCE");
     printf("=======================================================================================\n");

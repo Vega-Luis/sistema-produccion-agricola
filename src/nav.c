@@ -119,11 +119,7 @@ void main_menu_nav(PGconn *conn) {
 		switch (opt)
 		{
 		case '1':
-			if (check_credentials()) {
 				ope_opts_nav(conn);
-			} else {
-				printf("	Credenciales invalidos");
-			}
 			break;
 		
 		case '2':
